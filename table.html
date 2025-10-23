@@ -1,154 +1,187 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>todo-list</title>
-    <style>
-        table, th, td {
-            border: 1px solid black;
-            border-collapse: collapse;
-        }
-        th, td {
-            padding: 10px;
-        }
-        #btn {
-            padding: 10px 20px;
-            margin-bottom: 10px;
-            font-size: 16px;
-            cursor: pointer;
-            border: none;   
-            background-color: #877b63;
-            color: white;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-            margin-left: 250px;
-            box-shadow: 2px 2px 10px 2px rgba(0, 0, 0, 0.2)  ;
-        }
-        #btn:hover {
-            background-color: #356e60;
-        }
-        /* popup styles ----------------------------*/
-        #popup-container {   
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-        }
-        #popup-body {
-        background-color: #b7b99f;
-            padding: 20px;
-            box-shadow: 2px 2px 10px 2px rgba(0, 0, 0, 0.2);
-            
-            width: 300px;
-           
-        }
-        input,textarea {
-          
-            padding: 10px;
-            width: 300px;
-            box-sizing: border-box;
-            border: 1px solid #d3c4c4;
-            border-radius: 5px;
-             margin-bottom: 20px;
-        }
-        #sunmit-btn {
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            border: none;   
-            background-color: #dbd6ce;
-            color: rgb(195, 173, 173);
-            border-radius: 5px;
-           
-            box-shadow: 2px 2px 20px  rgba(29, 1, 1, 0.2)  ;
-            margin-left:100px;
-        }
-        #sunmit-btn:hover {
-            background-color: #356e60;
-           box-shadow: 0px 1px 5px rgb(221, 216, 226);
-        }
-        label {
-            font-weight: bold;
-            padding: 3px;
-           
-        }
-          
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Todo List</title>
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      background-color: #f4f4f4;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding-top: 40px;
+    }
 
+    table {
+      border-collapse: collapse;
+      width: 80%;
+      max-width: 800px;
+      text-align: center;
+      background-color: white;
+      margin-top: 20px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
 
-    </style>
+    th, td {
+      border: 1px solid black;
+      padding: 10px;
+    }
+
+    th {
+      background-color: #ddd;
+    }
+
+    #addPersonBtn {
+      padding: 10px 20px;
+      margin-bottom: 10px;
+      font-size: 16px;
+      cursor: pointer;
+      border: none;
+      background-color: #877b63;
+      color: white;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+      box-shadow: 2px 2px 10px 2px rgba(0, 0, 0, 0.2);
+    }
+
+    #addPersonBtn:hover {
+      background-color: #356e60;
+    }
+
+    #popupContainer {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.4);
+      justify-content: center;
+      align-items: center;
+    }
+
+    #popupBox {
+      background-color: #7c7d70;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 2px 2px 10px 2px rgba(0, 0, 0, 0.2);
+      width: 300px;
+      text-align: center;
+    }
+
+    input, textarea {
+      padding: 10px;
+      width: 100%;
+      box-sizing: border-box;
+      border: 1px solid #eebcbc;
+      border-radius: 5px;
+      margin-bottom: 15px;
+    }
+
+    #saveBtn {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border: none;
+      border-radius: 5px;
+      background-color: #356e60;
+      color: white;
+    }
+
+    #saveBtn:hover {
+      background-color: #244c43;
+    }
+
+    label {
+      font-weight: bold;
+      display: block;
+      text-align: left;
+    }
+
+    textarea {
+      resize: none;
+    }
+  </style>
 </head>
 <body>
-    <button id="btn">Add person</button>
-   <table>
+  <button id="addPersonBtn">Add Person</button>
+
+  <table>
     <tr>
-        <th>Name</th>
-        <th>Age</th>
-        <th>DOB</th>
-        <th>Email</th>
-        <th>Comments</th>
-        <th>Actions</th>
+      <th>Name</th>
+      <th>Age</th>
+      <th>DOB</th>
+      <th>Email</th>
+      <th>Comments</th>
+      <th>Actions</th>
     </tr>
-     </table>
-<div id="popup-container">
-<div id="popup-body">
-    <form action="">
-      <label for="name">Name:</label>  <input type="text" id="name" placeholder="Name"  required ><br>
-      <label for="age">Age:</label>  <input type="number" id="age" placeholder="Age"  required ><br>
-      <label for="dob">DOB:</label>  <input type="date" id="dob" placeholder="DOB"  required ><br>
-      <label for="email">Email:</label>  <input type="email" id="email" placeholder="Email"  required ><br>
-      <label for="comments">Comments:</label>  <textarea id="comments" placeholder="Comments"  required ></textarea><br>
-        <button type="submit" id="sunmit-btn">Submit</button>   
-    </form>
-</div>
-   </div>
+  </table>
 
-   <script>
+  <div id="popupContainer">
+    <div id="popupBox">
+      <form id="personForm">
+        <label for="nameField">Name:</label>
+        <input type="text" id="nameField" placeholder="Name" required>
 
-    const form = document.querySelector('form');
+        <label for="ageField">Age:</label>
+        <input type="number" id="ageField" placeholder="Age" required>
+
+        <label for="dobField">DOB:</label>
+        <input type="date" id="dobField" required>
+
+        <label for="emailField">Email:</label>
+        <input type="email" id="emailField" placeholder="Email" required>
+
+        <label for="commentField">Comments:</label>
+        <textarea id="commentField" placeholder="Comments" required></textarea>
+
+        <div>
+          <button type="submit" id="saveBtn">Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const addPersonBtn = document.getElementById('addPersonBtn');
+    const popupContainer = document.getElementById('popupContainer');
+    const personForm = document.getElementById('personForm');
     const table = document.querySelector('table');
 
-    form.addEventListener('submit', function(event) {
-        event.preventDefault();
+    addPersonBtn.addEventListener('click', () => {
+      popupContainer.style.display = 'flex';
+    });
 
-        const name = document.getElementById('name').value;
-        const age = document.getElementById('age').value;
-        const dob = document.getElementById('dob').value;
-        const email = document.getElementById('email').value;
-        const comments = document.getElementById('comments').value;
+    personForm.addEventListener('submit', function(event) {
+      event.preventDefault();
 
-        const newRow = table.insertRow();
+      const name = document.getElementById('nameField').value;
+      const age = document.getElementById('ageField').value;
+      const dob = document.getElementById('dobField').value;
+      const email = document.getElementById('emailField').value;
+      const comments = document.getElementById('commentField').value;
 
-        newRow.innerHTML = `
-            <td>${name}</td>
-            <td>${age}</td>
-            <td>${dob}</td>
-            <td>${email}</td>
-            <td>${comments}</td>
-            <td><button class="delete-btn">Delete</button>
-                <button class="edit-btn">Edit</button>  </td>
+      const newRow = table.insertRow();
+      newRow.innerHTML = `
+        <td>${name}</td>
+        <td>${age}</td>
+        <td>${dob}</td>
+        <td>${email}</td>
+        <td>${comments}</td>
+        <td>
+          <button class="removeRow">Delete</button>
+          <button class="updateRow">Edit</button>
+        </td>
+      `;
 
-        `;
-        
-
-        form.reset();
-
-        const deleteBtn = newRow.querySelector('.delete-btn');
-        deleteBtn.addEventListener('click', function() {
-            table.deleteRow(newRow.rowIndex);
-        });
-        const editBtn = newRow.querySelector('.edit-btn');
-        editBtn.addEventListener('click', function() {  
-            document.getElementById('name').value = newRow.cells[0].innerText;
-            document.getElementById('age').value = newRow.cells[1].innerText;
-            document.getElementById('dob').value = newRow.cells[2].innerText;
-            document.getElementById('email').value = newRow.cells[3].innerText;
-            document.getElementById('comments').value = newRow.cells[4].innerText;
-
-            table.deleteRow(newRow.rowIndex);
-        }); 
-    }); 
-   </script>
-  
+      popupContainer.style.display = 'none';
+      personForm.reset();
+    });
+  </script>
 </body>
 </html>
