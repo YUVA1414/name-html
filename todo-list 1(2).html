@@ -4,17 +4,39 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Todo List</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
   <style>
-    table, th, td {
-      border: 1px solid black;
-      border-collapse: collapse;
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      background-color: #f4f4f4;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding-top: 40px;
     }
+
+    table {
+      border-collapse: collapse;
+      width: 80%;
+      max-width: 800px;
+      text-align: center;
+      background-color: white;
+      margin-top: 20px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
     th, td {
+      border: 1px solid black;
       padding: 10px;
     }
-    #btn {
+
+    th {
+      background-color: #ddd;
+    }
+
+    #addPersonBtn {
       padding: 10px 20px;
       margin-bottom: 10px;
       font-size: 16px;
@@ -24,14 +46,15 @@
       color: white;
       border-radius: 5px;
       transition: background-color 0.3s;
-      margin-left: 250px;
       box-shadow: 2px 2px 10px 2px rgba(0, 0, 0, 0.2);
     }
-    #btn:hover {
+
+    #addPersonBtn:hover {
       background-color: #356e60;
     }
 
-    #popup-container, #delete-popup {
+    /* Popup Container */
+    #cont {
       display: none;
       position: fixed;
       top: 0;
@@ -43,83 +66,68 @@
       align-items: center;
     }
 
-    #popup-body, #delete-popup-body {
-      background-color: #b7b99f;
+    /* Popup Box */
+    #popupBox {
+      background-color: #7c7d70;
       padding: 20px;
       border-radius: 10px;
       box-shadow: 2px 2px 10px 2px rgba(0, 0, 0, 0.2);
       width: 300px;
+      text-align: center;
       position: relative;
     }
-    .close-icon {
+
+    /* Close Button */
+    .closeBtn {
       position: absolute;
-      top: 8px;
-      right: 12px;
-      font-size: 20px;
-      color: #333;
-      background: none;
+      top: 10px;
+      right: 10px;
+      background-color: red;
+      color: white;
       border: none;
+      border-radius: 50%;
+      width: 25px;
+      height: 25px;
       cursor: pointer;
       font-weight: bold;
     }
-    .close-icon:hover {
-      color: red;
-    }
+
     input, textarea {
       padding: 10px;
       width: 100%;
       box-sizing: border-box;
-      border: 1px solid #d3c4c4;
+      border: 1px solid #eebcbc;
       border-radius: 5px;
       margin-bottom: 15px;
     }
-    #submit-btn, #yes-btn, #no-btn {
+
+    #saveBtn {
       padding: 10px 20px;
       font-size: 16px;
       cursor: pointer;
       border: none;
       border-radius: 5px;
-      margin: 5px;
-    }
-    #submit-btn {
       background-color: #356e60;
       color: white;
     }
-    #submit-btn:hover {
+
+    #saveBtn:hover {
       background-color: #244c43;
     }
-    #no-btn {
-      background-color: #c0392b;
-      color: white;
-    }
-    #no-btn:hover {
-      background-color: #922b21;
-    }
-    #yes-btn {
-      background-color: #28a745;
-      color: rgb(228, 228, 228);
-    }
-    #yes-btn:hover {
-      background-color: #1e7e34;
-    }
+
     label {
       font-weight: bold;
+      display: block;
+      text-align: left;
     }
 
-    .icon-btn {
-      background: none;
-      border: none;
-      cursor: pointer;
-      font-size: 18px;
-      margin: 0 5px;
-    }
-    .icon-btn:hover {
-      transform: scale(1.1);
+    textarea {
+      resize: none;
     }
   </style>
 </head>
 <body>
-  <button id="btn">Add Person</button>
+  <button id="addPersonBtn">Add Person</button>
 
   <table>
     <tr>
@@ -131,68 +139,59 @@
       <th>Actions</th>
     </tr>
   </table>
-  <div id="const">
-    <div id="popupbox">
-      <button class="close-icon" id="close-popup">&times;</button>
-      <form id="person-form">
-        <label for="name">Name:</label>
-        <input type="text" id="name" placeholder="Name" required>
-        <label for="age">Age:</label>
-        <input type="number" id="age" placeholder="Age" required>\
-        <label for="dob">DOB:</label>
-        <input type="date" id="dob" required>
-        <label for="email">Email:</label>
-        <input type="email" id="email" placeholder="Email" required>
-        <label for="comments">Comments:</label>
-        <textarea id="comments" placeholder="Comments" required></textarea>
-        <div style="text-align: center;">
-          <button type="submit" id="submit-btn">Submit</button>
+
+  <div id="cont">
+    <div id="popupBox">
+      <button class="closeBtn" id="closePopup">&times;</button>
+      <form id="personForm">
+        <label for="nameField">Name:</label>
+        <input type="text" id="nameField" placeholder="Name" required>
+
+        <label for="ageField">Age:</label>
+        <input type="number" id="ageField" placeholder="Age" required>
+
+        <label for="dobField">DOB:</label>
+        <input type="date" id="dobField" required>
+
+        <label for="emailField">Email:</label>
+        <input type="email" id="emailField" placeholder="Email" required>
+
+        <label for="commentField">Comments:</label>
+        <textarea id="commentField" placeholder="Comments" required></textarea>
+
+        <div>
+          <button type="submit" id="saveBtn">Submit</button>
         </div>
       </form>
     </div>
   </div>
 
-  <!-- Delete Confirmation Popup -->
-  <div id="delete-popup">
-    <div id="delete-popup-body">
-      <p style="font-weight:bold; text-align:center;">Are you sure you want to delete this record?</p>
-      <div style="text-align:center;">
-        <button id="yes-btn">Yes</button>
-        <button id="no-btn">No</button>
-      </div>
-    </div>
-  </div>
-
   <script>
-    const addBtn = document.getElementById('btn');
-    const popup = document.getElementById('popup-container');
-    const form = document.getElementById('person-form');
+    const addPersonBtn = document.getElementById('addPersonBtn');
+    const popupContainer = document.getElementById('cont');
+    const personForm = document.getElementById('personForm');
     const table = document.querySelector('table');
-    const closePopup = document.getElementById('close-popup');
+    const closePopup = document.getElementById('closePopup');
 
-    const deletePopup = document.getElementById('delete-popup');
-    const yesBtn = document.getElementById('yes-btn');
-    const noBtn = document.getElementById('no-btn');
-    let rowToDelete = null;
-
-    addBtn.addEventListener('click', () => {
-      popup.style.display = 'flex';
+    // Open popup
+    addPersonBtn.addEventListener('click', () => {
+      popupContainer.style.display = 'flex';
     });
 
+    // Close popup
     closePopup.addEventListener('click', () => {
-      popup.style.display = 'none';
-      form.reset();
+      popupContainer.style.display = 'none';
     });
 
-    // Form submission
-    form.addEventListener('submit', function(event) {
+    // Add new person to table
+    personForm.addEventListener('submit', function(event) {
       event.preventDefault();
 
-      const name = document.getElementById('name').value;
-      const age = document.getElementById('age').value;
-      const dob = document.getElementById('dob').value;
-      const email = document.getElementById('email').value;
-      const comments = document.getElementById('comments').value;
+      const name = document.getElementById('nameField').value;
+      const age = document.getElementById('ageField').value;
+      const dob = document.getElementById('dobField').value;
+      const email = document.getElementById('emailField').value;
+      const comments = document.getElementById('commentField').value;
 
       const newRow = table.insertRow();
       newRow.innerHTML = `
@@ -202,46 +201,14 @@
         <td>${email}</td>
         <td>${comments}</td>
         <td>
-          <button class="icon-btn delete-btn"><i class="fa-solid fa-trash"></i></button>
-          <button class="icon-btn edit-btn"><i class="fa-solid fa-pen-to-square"></i></button>
+          <button class="removeRow">Delete</button>
+          <button class="updateRow">Edit</button>
         </td>
       `;
 
-      popup.style.display = 'none'; 
-      form.reset();
-
-      const deleteBtn = newRow.querySelector('.delete-btn');
-      const editBtn = newRow.querySelector('.edit-btn');
-      deleteBtn.addEventListener('click', () => {
-        rowToDelete = newRow;
-        deletePopup.style.display = 'flex';
-      });
-
-      editBtn.addEventListener('click', () => {
-        document.getElementById('name').value = newRow.cells[0].innerText;
-        document.getElementById('age').value = newRow.cells[1].innerText;
-        document.getElementById('dob').value = newRow.cells[2].innerText;
-        document.getElementById('email').value = newRow.cells[3].innerText;
-        document.getElementById('comments').value = newRow.cells[4].innerText;
-        table.deleteRow(newRow.rowIndex);
-        popup.style.display = 'flex';
-      });
-    });
-    yesBtn.addEventListener('click', () => {
-      if (rowToDelete) {
-        table.deleteRow(rowToDelete.rowIndex);
-        rowToDelete = null;
-      }
-      deletePopup.style.display = 'none';
-    });
-
-    noBtn.addEventListener('click', () => {
-      deletePopup.style.display = 'none';
-      rowToDelete = null;
+      popupContainer.style.display = 'none';
+      personForm.reset();
     });
   </script>
 </body>
 </html>
-
-
-
