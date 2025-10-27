@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Todo List</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    table, th, td {
+      border: 1px solid black;
+      border-collapse: collapse;
+      margin-left: 350px;
+     
+    }
+    
+    th, td {
+      padding: 10px;
+    }
+    #btn {
+      padding: 10px 20px;
+      margin-bottom: 10px;
+      font-size: 16px;
+      cursor: pointer;
+      border: none;
+      background-color: #877b63;
+      color: white;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+      margin-left: 570px;
+      box-shadow: 2px 2px 10px 2px rgba(0, 0, 0, 0.2);
+    }
+    #btn:hover { background-color: #356e60; }
+
+    #popup-container, #delete-popup {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(0, 0, 0, 0.4);
+      justify-content: center; align-items: center;
+    }
+
+    #popup-body, #delete-popup-body {
+      background-color: #b7b99f;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 2px 2px 10px 2px rgba(0, 0, 0, 0.2);
+      width: 300px;
+      position: relative;
+    }
+
+    .close-icon {
+      position: absolute;
+      top: 8px;
+      right: 12px;
+      font-size: 20px;
+      color: #333;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .close-icon:hover { color: rgb(167, 49, 49); }
+
+    input, textarea {
+      padding: 10px;
+      width: 100%;
+      box-sizing: border-box;
+      border: 1px solid #d3c4c4;
+      border-radius: 5px;
+      margin-bottom: 15px;
+    }
+
+    #submit-btn, #yes-btn, #no-btn {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border: none;
+      border-radius: 5px;
+      margin: 5px;
+    }
+
+    #submit-btn { background-color: #356e60; color: white; }
+    #submit-btn:hover { background-color: #244c43; }
+
+    #no-btn { background-color: li; color: rgb(117, 94, 94); }
+    #no-btn:hover { background-color: #ded0cf; }
+
+    #yes-btn { background-color: rgb(155, 83, 83); color: rgb(228, 228, 228); }
+    #yes-btn:hover { background-color: whitesmoke; }
+
+    label { font-weight: bold; }
+
+    .icon-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 18px;
+      margin: 0 5px;
+    }
+    .icon-btn:hover { transform: scale(1.1); }
+  </style>
+</head>
+<body>
+  <button id="btn">Add Person</button>
+
+  <table id="data-table">
+    <tr>
+      <th>Name</th>
+      <th>Age</th>
+      <th>DOB</th>
+      <th>Email</th>
+      <th>Comments</th>
+      <th>Actions</th>
+    </tr>
+  </table>
+
+  <!-- Popup -->
+  <div id="popup-container">
+    <div id="popup-body">
+      <button class="close-icon" id="close-popup">&times;</button>
+      <form id="person-form">
+        <label for="name">Name:</label>
+        <input type="text" id="name" placeholder="Name" required>
+        <label for="age">Age:</label>
+        <input type="number" id="age" placeholder="Age" required>
+        <label for="dob">DOB:</label>
+        <input type="date" id="dob" required>
+        <label for="email">Email:</label>
+        <input type="email" id="email" placeholder="Email" required>
+        <label for="comments">Comments:</label>
+        <textarea id="comments" placeholder="Comments" required></textarea>
+        <div style="text-align: center;">
+          <button type="submit" id="submit-btn">Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="delete-popup">
+    <div id="delete-popup-body">
+      <p style="font-weight:bold; text-align:center;">Are you sure you want to delete this record?</p>
+      <div style="text-align:center;">
+        <button id="yes-btn">Yes</button>
+        <button id="no-btn">No</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const addBtn = document.getElementById('btn');
+    const popup = document.getElementById('popup-container');
+    const form = document.getElementById('person-form');
+    const table = document.getElementById('data-table');
+    const closePopup = document.getElementById('close-popup');
+    const deletePopup = document.getElementById('delete-popup');
+    const yesBtn = document.getElementById('yes-btn');
+    const noBtn = document.getElementById('no-btn');
+    let rowToDelete = null;
+
+    let people = JSON.parse(localStorage.getItem('people')) || [];
+
+    function renderTable() {
+     
+      table.querySelectorAll('tr:not(:first-child)').forEach(row => row.remove());
+
+      people.forEach((person, index) => {
+        const newRow = table.insertRow();
+        newRow.innerHTML = `
+          <td>${person.name}</td>
+          <td>${person.age}</td>
+          <td>${person.dob}</td>
+          <td>${person.email}</td>
+          <td>${person.comments}</td>
+          <td>
+            <button class="icon-btn delete-btn"><i class="fa-solid fa-trash"></i></button>
+            <button class="icon-btn edit-btn"><i class="fa-solid fa-pen-to-square"></i></button>
+          </td>
+        `;
+
+        const deleteBtn = newRow.querySelector('.delete-btn');
+        const editBtn = newRow.querySelector('.edit-btn');
+
+        deleteBtn.addEventListener('click', () => {
+          rowToDelete = index;
+          deletePopup.style.display = 'flex';
+        });
+
+        editBtn.addEventListener('click', () => {
+          const p = people[index];
+          document.getElementById('name').value = p.name;
+          document.getElementById('age').value = p.age;
+          document.getElementById('dob').value = p.dob;
+          document.getElementById('email').value = p.email;
+          document.getElementById('comments').value = p.comments;
+          people.splice(index, 1);
+          saveData();
+          renderTable();
+          popup.style.display = 'flex';
+        });
+      });
+    }
+
+    function saveData() {
+      localStorage.setItem('people', JSON.stringify(people));
+    }
+
+    addBtn.addEventListener('click', () => {
+      popup.style.display = 'flex';
+    });
+
+    closePopup.addEventListener('click', () => {
+      popup.style.display = 'none';
+      form.reset();
+    });
+
+    form.addEventListener('submit', function(event) {
+      event.preventDefault();
+      const newPerson = {
+        name: document.getElementById('name').value,
+        age: document.getElementById('age').value,
+        dob: document.getElementById('dob').value,
+        email: document.getElementById('email').value,
+        comments: document.getElementById('comments').value
+      };
+      people.push(newPerson);
+      saveData();
+      renderTable();
+      popup.style.display = 'none';
+      form.reset();
+    });
+
+    yesBtn.addEventListener('click', () => {
+      if (rowToDelete !== null) {
+        people.splice(rowToDelete, 1);
+        saveData();
+        renderTable();
+        rowToDelete = null;
+      }
+      deletePopup.style.display = 'none';
+    });
+
+    noBtn.addEventListener('click', () => {
+      deletePopup.style.display = 'none';
+      rowToDelete = null;
+    });
+    renderTable();
+  </script>
+</body>
+</html>
